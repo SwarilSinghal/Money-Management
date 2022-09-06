@@ -33,7 +33,7 @@ Session(app)
 @app.route("/scanQRdebit")
 def scanQRdebit():
     print("HOME session:", session)
-    if "username" not in session or session['username'] == None:
+    if "username" not in session or ("username" in session and session['username'] == None):
         return render_template("login.html")
     return render_template('scanQRDebit.html')
 
@@ -42,7 +42,7 @@ def scanQRdebit():
 @app.route("/")
 def menu():
     print("HOME session:", session)
-    if "username" not in session or session['username'] == None:
+    if "username" not in session or ("username" in session and session['username'] == None):
         return render_template("login.html")
     # print("USER TYPE MENU:", session['type'])
     return render_template('menu.html', logged_in='true', type=session['type'])
@@ -52,7 +52,7 @@ def menu():
 @app.route("/scanQRcredit")
 def scanQRcredit():
     print("HOME session:", session)
-    if "username" not in session or session['username'] == None:
+    if "username" not in session or ("username" in session and session['username'] == None):
         return render_template("login.html")
     return render_template('scanQRcredit.html')
 
@@ -126,7 +126,7 @@ def login(records=None):
         # records = db.cashManagement
         user_found = readDb( "Users" , {"username": username})
         # print("user Found" + email_found)
-        if user_found:
+        if user_found and "username" in user_found and "password" in user_found:
             username = user_found['username']
             passwordcheck = user_found['password']
 
@@ -161,9 +161,9 @@ def logout():
 
 @app.route("/debit", methods=["POST", "GET"])
 def debit():
-    if "username" not in session or session['username'] == None:
+    if "username" not in session or ("username" in session and session['username'] == None):
         return render_template("login.html")
-    if request.method == "POST":
+    if hasattr(request, 'method') and request.method == "POST":
         json_req = request.get_json()
         print(json_req)
         cursor = readDb('Customers', {"cid": str(json_req['code'])})
@@ -197,27 +197,28 @@ def rand_string(length = 8):
 
 
 def generate_debit_receipt(document):
-    document['user'] = session['username']
-    document['txn_id'] = 'CT' + rand_string()
-    document['time'] = datetime.datetime.now(pytz.timezone('Asia/Kolkata'))
-    mongo_uri = "mongodb://swaril:" + urllib.parse.quote(
-        "$w@R!1") + "@ac-ymz3eon-shard-00-00.iympypo.mongodb.net:27017,ac-ymz3eon-shard-00-01.iympypo.mongodb.net:27017,ac-ymz3eon-shard-00-02.iympypo.mongodb.net:27017/?ssl=true&replicaSet=atlas-y20jq1-shard-0&authSource=admin&retryWrites=true&w=majority"
-    client = pymongo.MongoClient(
-        mongo_uri)
+    if("username" in session):
+        document['user'] = session['username']
+        document['txn_id'] = 'CT' + rand_string()
+        document['time'] = datetime.datetime.now(pytz.timezone('Asia/Kolkata'))
+        mongo_uri = "mongodb://swaril:" + urllib.parse.quote(
+            "$w@R!1") + "@ac-ymz3eon-shard-00-00.iympypo.mongodb.net:27017,ac-ymz3eon-shard-00-01.iympypo.mongodb.net:27017,ac-ymz3eon-shard-00-02.iympypo.mongodb.net:27017/?ssl=true&replicaSet=atlas-y20jq1-shard-0&authSource=admin&retryWrites=true&w=majority"
+        client = pymongo.MongoClient(
+            mongo_uri)
 
-    mydb = client["cashManagement"]
-    mycol = mydb["debitTransactions"]
-    x = mycol.insert_one(document)
-    return x;
+        mydb = client["cashManagement"]
+        mycol = mydb["debitTransactions"]
+        x = mycol.insert_one(document)
+        return x;
 
 
 
 
 @app.route("/credit", methods=["POST", "GET"])
 def credit():
-    if "username" not in session or session['username'] == None:
+    if "username" not in session or ("username" in session and session['username'] == None):
         return render_template("login.html")
-    if request.method == "POST":
+    if hasattr(request, 'method') and request.method == "POST":
         json_req = request.get_json()
         print(json_req)
         cursor = readDb('Customers', {"cid": str(json_req['code'])})
@@ -284,7 +285,7 @@ def viewBalanceCredit():
 
 @app.route("/scanQR", methods=["POST", "GET"])
 def scanQR():
-    if "username" not in session or session['username'] == None:
+    if "username" not in session or ( "username" in session and session['username'] == None):
         return render_template("login.html")
     return render_template("scanQR.html")
 
