@@ -14,7 +14,6 @@ import datetime
 from pymongo import auth
 import cv2
 import pytz
-from camera import VideoCamera
 
 app: Flask = Flask(__name__)
 app.secret_key = "testing"
@@ -294,34 +293,34 @@ def scanQR():
 
 
 
-def gen():
-    cap = cv2.VideoCapture(0)
-    # initialize the cv2 QRCode detector
-    detector = cv2.QRCodeDetector()
-    while True:
-        _, img = cap.read()
-        data, bbox, _ = detector.detectAndDecode(img)
-        if bbox is not None:
-            if data:
-                print("[+] QR Code detected, data:", data)
-                cap.release()
-                dictToSend = {'data' : data}
-                # res = requests.post('http://localhost:5000/viewBalance', json=dictToSend)
-                # print(res)
-                # return res
-                with app.app_context():
-                    return redirect(url_for('viewBalance'))
-
-                break
-
-        ret, jpeg = cv2.imencode('.jpg', img)
-
-        frame =  jpeg.tobytes()
-        # frame = frame.toByte
-        yield (b'--frame\r\n'
-               b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n\r\n')
-        if cv2.waitKey(1) == ord("q"):
-            break
+# def gen():
+#     cap = cv2.VideoCapture(0)
+#     # initialize the cv2 QRCode detector
+#     detector = cv2.QRCodeDetector()
+#     while True:
+#         _, img = cap.read()
+#         data, bbox, _ = detector.detectAndDecode(img)
+#         if bbox is not None:
+#             if data:
+#                 print("[+] QR Code detected, data:", data)
+#                 cap.release()
+#                 dictToSend = {'data' : data}
+#                 # res = requests.post('http://localhost:5000/viewBalance', json=dictToSend)
+#                 # print(res)
+#                 # return res
+#                 with app.app_context():
+#                     return redirect(url_for('viewBalance'))
+#
+#                 break
+#
+#         ret, jpeg = cv2.imencode('.jpg', img)
+#
+#         frame =  jpeg.tobytes()
+#         # frame = frame.toByte
+#         yield (b'--frame\r\n'
+#                b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n\r\n')
+#         if cv2.waitKey(1) == ord("q"):
+#             break
 
     # cap.release()
 
@@ -344,42 +343,42 @@ def gen():
 
 
 
-@app.route('/video_feed')
-def video_feed():
-    return Response(gen(),
-                    mimetype='multipart/x-mixed-replace; boundary=frame',)
-    return redirect(url_for('viewBalance'))
+# @app.route('/video_feed')
+# def video_feed():
+#     return Response(gen(),
+#                     mimetype='multipart/x-mixed-replace; boundary=frame',)
+#     return redirect(url_for('viewBalance'))
 
 
-@app.route("/result", methods=["POST"])
-def result():
-    # data = json.loads(request.json)
-    # print(data)
-    if True:  # Only if data has been posted
-        result = request.form  # Get the data
-        email = result["email"]
-        password = result["pass"]
-        try:
-            # Try signing in the user with the given information
-            user = auth.sign_in_with_email_and_password(email, password)
-            # Insert the user data in the global person
-            global person
-            person["is_logged_in"] = True
-            person["email"] = user["email"]
-            person["uid"] = user["localId"]
-            # Get the name of the user
-            data = db.child("users").get()
-            person["name"] = data.val()[person["uid"]]["name"]
-            # Redirect to welcome page
-            return redirect(url_for('welcome'))
-        except:
-            # If there is any error, redirect back to login
-            return redirect(url_for('login'))
-    else:
-        # if person["is_logged_in"] == True:
-        #     return redirect(url_for('welcome'))
-        # else:
-        return redirect(url_for('login'))
-
+# @app.route("/result", methods=["POST"])
+# def result():
+#     # data = json.loads(request.json)
+#     # print(data)
+#     if True:  # Only if data has been posted
+#         result = request.form  # Get the data
+#         email = result["email"]
+#         password = result["pass"]
+#         try:
+#             # Try signing in the user with the given information
+#             user = auth.sign_in_with_email_and_password(email, password)
+#             # Insert the user data in the global person
+#             global person
+#             person["is_logged_in"] = True
+#             person["email"] = user["email"]
+#             person["uid"] = user["localId"]
+#             # Get the name of the user
+#             data = db.child("users").get()
+#             person["name"] = data.val()[person["uid"]]["name"]
+#             # Redirect to welcome page
+#             return redirect(url_for('welcome'))
+#         except:
+#             # If there is any error, redirect back to login
+#             return redirect(url_for('login'))
+#     else:
+#         # if person["is_logged_in"] == True:
+#         #     return redirect(url_for('welcome'))
+#         # else:
+#         return redirect(url_for('login'))
+#
 
 app.run()
