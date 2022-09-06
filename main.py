@@ -59,38 +59,38 @@ def scanQRcredit():
 
 
 
-@app.route("/lastDebitTransactions", methods=['POST'])
-def lastDebitTransactions():
-    print("TEST")
-    if request.method == "POST":
-        json_req = request.get_json()
-        print(json_req)
-        cursor = readTransactions('debitTransactions', {"cid": str(json_req['code'])})
-        print(cursor)
+# @app.route("/lastDebitTransactions", methods=['POST'])
+# def lastDebitTransactions():
+#     print("TEST")
+#     if request.method == "POST":
+#         json_req = request.get_json()
+#         print(json_req)
+#         cursor = readTransactions('debitTransactions', {"cid": str(json_req['code'])})
+#         print(cursor)
+#
+#         if(cursor['status'] and cursor['status'] == 'error'):
+#             return cursor
+#         return list(cursor)
+#         return render_template('login.html', transactions=list(cursor))
 
-        if(cursor['status'] and cursor['status'] == 'error'):
-            return cursor
-        return list(cursor)
-        return render_template('login.html', transactions=list(cursor))
 
 
-
-def readTransactions(collection, condition):
-    try:
-        mongo_uri = "mongodb://swaril:" + urllib.parse.quote(
-        "$w@R!1") + "@ac-ymz3eon-shard-00-00.iympypo.mongodb.net:27017,ac-ymz3eon-shard-00-01.iympypo.mongodb.net:27017,ac-ymz3eon-shard-00-02.iympypo.mongodb.net:27017/?ssl=true&replicaSet=atlas-y20jq1-shard-0&authSource=admin&retryWrites=true&w=majority"
-        client = pymongo.MongoClient(
-            mongo_uri)
-        db = client.cashManagement
-        print(db)
-        collection = 'Customers'
-        records = db[collection]
-        print(records)
-        cursors = records.find_one(condition)
-        print(cursors)
-        return cursors
-    except:
-        return {'status':'error'}
+# def readTransactions(collection, condition):
+#     try:
+#         mongo_uri = "mongodb://swaril:" + urllib.parse.quote(
+#         "$w@R!1") + "@ac-ymz3eon-shard-00-00.iympypo.mongodb.net:27017,ac-ymz3eon-shard-00-01.iympypo.mongodb.net:27017,ac-ymz3eon-shard-00-02.iympypo.mongodb.net:27017/?ssl=true&replicaSet=atlas-y20jq1-shard-0&authSource=admin&retryWrites=true&w=majority"
+#         client = pymongo.MongoClient(
+#             mongo_uri)
+#         db = client.cashManagement
+#         print(db)
+#         collection = 'Customers'
+#         records = db[collection]
+#         print(records)
+#         cursors = records.find_one(condition)
+#         print(cursors)
+#         return cursors
+#     except:
+#         return {'status':'error'}
 
 
 
