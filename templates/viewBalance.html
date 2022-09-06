@@ -43,6 +43,7 @@
 </form>
     <script>
         function last10Transaction(code){
+            return 1;
 <!--            var xhr = new XMLHttpRequest();-->
 <!--            xhr.open("POST", "/lastDebitTransactions", true);-->
 <!--            xhr.setRequestHeader('Content-Type', 'application/json');-->
@@ -52,14 +53,15 @@
 <!--            xhr.onload = function() {-->
 <!--              var data = JSON.parse(this.responseText);-->
 <!--              if(data['status'] == 'success')-->
-<!--                redirect();-->
+<!--&lt;!&ndash;                redirect();&ndash;&gt;-->
+<!--           -->
 <!--              else {-->
 <!--                if(data['message']){-->
 <!--                    alert(data['message']);-->
 <!--                }-->
 <!--              }-->
 <!--            }-->
-            return;
+<!--            return;-->
         }
         function credit(balance, code ) {
         var amount_list = document.getElementsByName('amount');

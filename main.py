@@ -66,11 +66,11 @@ def scanQRcredit():
 #         print(json_req)
 #         cursor = readTransactions('debitTransactions', {"cid": str(json_req['code'])})
 #         print(cursor)
-#
-#         if(cursor['status'] and cursor['status'] == 'error'):
-#             return cursor
-#         return list(cursor)
-#         return render_template('login.html', transactions=list(cursor))
+
+        # if(cursor['status'] and cursor['status'] == 'error'):
+        #     return cursor
+        # return list(cursor)
+        # return render_template('lastTransactions.html', transactions=list(cursor))
 
 
 
