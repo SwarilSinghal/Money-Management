@@ -1,52 +1,52 @@
 
-<!--{% extends "base.html" %}-->
-<!--{% block title %}Login System{% endblock %}-->
+{% extends "base.html" %}
+{% block title %}Login System{% endblock %}
 
-<!--{% block content %}-->
+{% block content %}
 
-<!--{% if message  %}-->
-<!--<script src="./jqeury.js"></script>-->
-<!--<script src="./jsqrcode-combined.js"></script>-->
-<!--<script src="./html5-qrcode.js"></script>-->
-<!--    <div class="alert alert-secondary" role="alert">-->
-<!--        <p>{{ message }}</p>-->
-<!--    </div>-->
-<!--{% endif %}-->
-<!--<div id="reader"></div>-->
-<!--<script>-->
-<!--(document).html5_qrcode_getSupportedCameras(-->
-<!--  function (devices) {-->
-<!--    /**-->
-<!--     * devices would be an array of objects of type:-->
-<!--     * { id: "id", label: "label" }-->
-<!--     */-->
-<!--    if (devices && devices.length) {-->
-<!--      var cameraId = devices[0].id;-->
-<!--      // .. use this to start scanning.-->
-<!--    }-->
-<!--  }, function (error) {-->
-<!--    // handle errors-->
-<!--    console.error("Enumerating cameras failed. ", error);-->
-<!--  }-->
-<!--);-->
-<!--$('#reader').html5_qrcode(-->
-<!--  cameraId,-->
-<!--  function (qrCodeMessage) {-->
-<!--    console.log("QR Code decoded. Message = " + qrCodeMessage);-->
-<!--  }, function (errorMessage) {-->
-<!--    console.error("Error processing QR code. ", errorMessage);-->
-<!--  }, function (errorMessage){-->
-<!--    console.error("Error getting stream. ", errorMessage);-->
-<!--  },-->
-<!--  { fps: 10 });-->
-<!--  </script>-->
+{% if message  %}
+<script src="./jqeury.js"></script>
+<script src="./jsqrcode-combined.js"></script>
+<script src="./html5-qrcode.js"></script>
+    <div class="alert alert-secondary" role="alert">
+        <p>{{ message }}</p>
+    </div>
+{% endif %}
+<div id="reader"></div>
+<script>
+(document).html5_qrcode_getSupportedCameras(
+  function (devices) {
+    /**
+     * devices would be an array of objects of type:
+     * { id: "id", label: "label" }
+     */
+    if (devices && devices.length) {
+      var cameraId = devices[0].id;
+      // .. use this to start scanning.
+    }
+  }, function (error) {
+    // handle errors
+    console.error("Enumerating cameras failed. ", error);
+  }
+);
+$('#reader').html5_qrcode(
+  cameraId,
+  function (qrCodeMessage) {
+    console.log("QR Code decoded. Message = " + qrCodeMessage);
+  }, function (errorMessage) {
+    console.error("Error processing QR code. ", errorMessage);
+  }, function (errorMessage){
+    console.error("Error getting stream. ", errorMessage);
+  },
+  { fps: 10 });
+  </script>
 
-<!--<form action="/viewBalance" method="POST">-->
-<!--&lt;!&ndash;    <input type="file" accept="image/*" capture="camera">&ndash;&gt;-->
-<!--     <input type="file" name="QR" accept="image/*" capture="capture">-->
-<!--    <label for="InputEmail">Email address</label>-->
-<!--      <input name="email" class="form-control" id="InputEmail"  placeholder="Enter email">-->
-<!--    <button type = "submit" class = 'btn btn-primary'> Read QR </button>-->
-<!--</form>-->
-<!--<img src="{{ url_for('video_feed') }}" />-->
-<!--{% endblock %}-->
+<form action="/viewBalance" method="POST">
+<!--    <input type="file" accept="image/*" capture="camera">-->
+     <input type="file" name="QR" accept="image/*" capture="capture">
+    <label for="InputEmail">Email address</label>
+      <input name="email" class="form-control" id="InputEmail"  placeholder="Enter email">
+    <button type = "submit" class = 'btn btn-primary'> Read QR </button>
+</form>
+<img src="{{ url_for('video_feed') }}" />
+{% endblock %}
